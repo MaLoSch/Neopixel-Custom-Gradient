@@ -3,8 +3,8 @@
 
 // LEDs
 #define LED_PIN 23 // pin at which the LED strip is connected
-#define LED_COUNT 60 // <<<--- Set the number of LEDs per strip || Currently only working with multiples of 12 (12,24,36,48,60,72,...)
-#define BRIGHTNESS 64 // Set BRIGHTNESS (max = 255)
+#define LED_COUNT 36 // <<<--- Set the number of LEDs per strip || Currently only working with multiples of 12 (12,24,36,48,60,72,...)
+#define BRIGHTNESS 255 // Set BRIGHTNESS (max = 255)
 int colorArr[LED_COUNT][3]; // 2D Array to store color values for each pixel
 const int colorShift = 1; // <<<--- variable to offset the color
 int colorOffset = 0; // variable which determines how much the gradient is offset
@@ -26,7 +26,7 @@ void setup() {
   strip.setBrightness(BRIGHTNESS); // Set the brightness of all pixels
 
   //setColorArray(255,0,0); // <<<--- function call for a single color
-  setColorArray(255,0,0,0,255,0); // <<<--- function call for 2 color gradient
+  setColorArray(0,255,0,0,0,255); // <<<--- function call for 2 color gradient
   //setColorArray(255,0,0,0,255,0,0,0,255); // <<<--- function call for 3 color gradient
   //setColorArray(255,0,0,0,255,0,0,0,255,255,255,0); // <<<--- function call for 4 color gradient
 } 
@@ -37,7 +37,8 @@ void loop() {
   if(currentMillis - previousMillis > loopInterval) { // wait for a certain amount of time (e.g. loopInterval)
     previousMillis = currentMillis; // update previousMillis with currentMillis
     for(int i=0; i<LED_COUNT; i++) { // loop to update all pixels on the LED strip
-      strip.setPixelColor((i+colorOffset)%LED_COUNT, strip.Color(colorArr[i][0],colorArr[i][1],colorArr[i][2])); // set the color of each pixel using the values from colorArr
+      uint32_t color = strip.Color(colorArr[i][0],colorArr[i][1],colorArr[i][2]);
+      strip.setPixelColor((i+colorOffset)%LED_COUNT, color); // set the color of each pixel using the values from colorArr
     }
     strip.show(); // update the pixels on the LED strip
     colorOffset = (colorOffset + colorShift) % LED_COUNT; // shifting the colors along the LED strip
